@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Hashtable;
 
 public class ThreadClient extends Thread {
     private Socket socket;
@@ -31,10 +30,17 @@ public class ThreadClient extends Thread {
                 Message message = (Message) this.objectInputStream.readObject();
                 this.threadServer.sendToAll(message);
             } catch (IOException e) {
+                this.threadServer.getClientList().remove(this.getClientId());
                 e.printStackTrace();
+                break;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
+                break;
             }
         }
+    }
+
+    public String getClientId() {
+        return this.socket.getInetAddress().getHostAddress() + ":" + this.socket.getPort();
     }
 }

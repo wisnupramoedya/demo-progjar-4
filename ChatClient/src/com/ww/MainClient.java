@@ -1,10 +1,7 @@
-import com.ww.Message;
-import com.ww.User;
-import com.ww.Utils;
+package com.ww;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class MainClient {
     public static void main(String[] args) {
@@ -15,13 +12,12 @@ public class MainClient {
             threadClient.start();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-            System.out.print("Input username: ");
+            System.out.print("Username: ");
             String username = bufferedReader.readLine();
             User user = new User();
             user.setFullName(username);
 
             while (true) {
-                System.out.print("> ");
                 String text = bufferedReader.readLine();
 
                 Message message = new Message();

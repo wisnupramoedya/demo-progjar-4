@@ -1,3 +1,5 @@
+package com.ww;
+
 import com.ww.Message;
 
 import java.io.IOException;
@@ -15,7 +17,7 @@ public class ThreadClient extends Thread {
         while (true) {
             try {
                 Message message = (Message) this.objectInputStream.readObject();
-                System.out.println(message.outputMessage());
+                System.out.println(message.outputBroadcastMessage());
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }

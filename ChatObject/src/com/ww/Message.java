@@ -29,8 +29,12 @@ public class Message implements Serializable {
         this.user = user;
     }
 
-    public String outputMessage() {
+    public String outputBroadcastMessage() {
+        return this.outputMessage("*");
+    }
+
+    public String outputMessage(String target) {
         Date date = Calendar.getInstance().getTime();
-        return "[" + dateFormat.format(date) + "] " + this.user.getFullName() + ": \"" + this.text + "\"";
+        return "[" + dateFormat.format(date) + "] " + this.user.getFullName() + " > " + target + " : \"" + this.text + "\"";
     }
 }

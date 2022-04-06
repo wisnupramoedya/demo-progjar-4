@@ -7,7 +7,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class ThreadServer extends Thread {
-    private final Hashtable<String, ThreadClient> clientList;
+    private Hashtable<String, ThreadClient> clientList;
     private final ServerSocket serverSocket;
 
     public ThreadServer() throws IOException {
@@ -23,7 +23,7 @@ public class ThreadServer extends Thread {
                 ThreadClient threadClient = new ThreadClient(socket, this);
                 threadClient.start();
 
-                String clientId = socket.getInetAddress().getHostAddress() + ":" + socket.getPort();
+                String clientId = threadClient.getClientId();
                 this.clientList.put(clientId, threadClient);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -40,5 +40,9 @@ public class ThreadServer extends Thread {
             ThreadClient threadClient = this.clientList.get(clientId);
             threadClient.sendMessage(message);
         }
+    }
+
+    public Hashtable<String, ThreadClient> getClientList() {
+        return clientList;
     }
 }
