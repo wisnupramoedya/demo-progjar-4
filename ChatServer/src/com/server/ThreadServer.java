@@ -42,11 +42,12 @@ public class ThreadServer extends Thread {
         StringBuilder text = new StringBuilder("Online users:\n");
         Enumeration<String> enumeration = this.clients.keys();
         while (enumeration.hasMoreElements()) {
+            text.append("\n");
             String clientId = enumeration.nextElement();
             if (this.clients.get(clientId).getUser() == null) {
                 continue;
             }
-            text.append("-> ").append(this.clients.get(clientId).getUser().getFullName()).append("\n");
+            text.append("-> ").append(this.clients.get(clientId).getUser().getFullName());
         }
 
         message.setText(text.toString());
