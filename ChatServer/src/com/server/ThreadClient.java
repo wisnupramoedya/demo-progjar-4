@@ -22,6 +22,10 @@ public class ThreadClient extends Thread {
         this.threadServer = threadServer;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public void sendMessage(Message message) throws IOException {
         this.objectOutputStream.writeObject(message);
         this.objectOutputStream.flush();
