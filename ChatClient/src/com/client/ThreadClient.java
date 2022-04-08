@@ -5,11 +5,14 @@ import com.ww.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.Socket;
 
 public class ThreadClient extends Thread {
     private final ObjectInputStream objectInputStream;
+    private final Socket socket;
 
-    public ThreadClient(ObjectInputStream objectInputStream) {
+    public ThreadClient(Socket socket, ObjectInputStream objectInputStream) {
+        this.socket = socket;
         this.objectInputStream = objectInputStream;
     }
 
@@ -17,6 +20,11 @@ public class ThreadClient extends Thread {
     public void run() {
         while (true) {
             try {
+                if (!this.socket.isConnected()) {
+                    System.err.println("Error: Socket has been disconnected");
+                    System.out.println("Type ENTER to exit.");
+                    break;
+                }
                 Message message = (Message) this.objectInputStream.readObject();
                 System.out.println(message.outputMessage());
             } catch (IOException | ClassNotFoundException e) {

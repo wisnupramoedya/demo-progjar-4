@@ -43,6 +43,9 @@ public class ThreadServer extends Thread {
         Enumeration<String> enumeration = this.clients.keys();
         while (enumeration.hasMoreElements()) {
             String clientId = enumeration.nextElement();
+            if (this.clients.get(clientId).getUser() == null) {
+                continue;
+            }
             text.append("-> ").append(this.clients.get(clientId).getUser().getFullName()).append("\n");
         }
 
