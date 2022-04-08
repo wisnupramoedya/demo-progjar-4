@@ -35,16 +35,39 @@ public class ThreadServer extends Thread {
         }
     }
 
-    public void sendToAll(Message message) throws IOException {
-        Enumeration<String> enumeration = this.clients.keys();
+    public Message getAllOnlineUsers() {
+        Message message = new Message();
+        message.setCommand(true);
 
+        StringBuilder text = new StringBuilder("Online users:\n");
+        Enumeration<String> enumeration = this.clients.keys();
         while (enumeration.hasMoreElements()) {
             String clientId = enumeration.nextElement();
+            text.append("-> ").append(this.clients.get(clientId).getUser().getFullName()).append("\n");
+        }
+
+        message.setText(text.toString());
+        return message;
+    }
 
             ThreadClient threadClient = this.clients.get(clientId);
             threadClient.sendMessage(message);
         }
     }
+
+    public void readCommand(Message message, ThreadClient threadClient) throws IOException {
+        if (!message.isCommand()) {
+            return;
+        }
+
+        if (message.outputMessage().equals("lists")) {
+            threadClient.sendMessage(this.getAllOnlineUsers());
+        } else {
+            this.sendToAll(message);
+        }
+    }
+
+
 
     public Hashtable<String, ThreadClient> getClients() {
         return clients;

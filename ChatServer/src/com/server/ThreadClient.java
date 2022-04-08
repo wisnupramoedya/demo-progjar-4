@@ -45,7 +45,7 @@ public class ThreadClient extends Thread {
         while (true) {
             try {
                 Message message = (Message) this.objectInputStream.readObject();
-                this.threadServer.sendToAll(message);
+                this.threadServer.readCommand(message, this);
             } catch (IOException e) {
                 this.threadServer.getClients().remove(this.getClientId());
                 try {
