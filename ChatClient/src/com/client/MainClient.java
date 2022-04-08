@@ -23,10 +23,14 @@ public class MainClient {
             System.out.println("Username named " + user.getFullName() + " has been created.");
 
             System.out.println("Start the connection.");
-            ThreadClient threadClient = new ThreadClient(new ObjectInputStream(socket.getInputStream()));
-            threadClient.start();
-            objectOutputStream.writeObject(user);
-            objectOutputStream.flush();
+            try {
+                ThreadClient threadClient = new ThreadClient(socket, new ObjectInputStream(socket.getInputStream()));
+                threadClient.start();
+                objectOutputStream.writeObject(user);
+                objectOutputStream.flush();
+            } catch (IOException e) {
+                throw new IOException("Socket is disconnected");
+            }
 
             while (true) {
                 try {
