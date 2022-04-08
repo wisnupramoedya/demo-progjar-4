@@ -1,4 +1,6 @@
-package com.ww;
+package com.server;
+
+import com.ww.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

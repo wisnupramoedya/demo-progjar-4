@@ -1,4 +1,7 @@
-package com.ww;
+package com.server;
+
+import com.ww.Message;
+import com.ww.Utils;
 
 import java.io.IOException;
 import java.net.ServerSocket;
