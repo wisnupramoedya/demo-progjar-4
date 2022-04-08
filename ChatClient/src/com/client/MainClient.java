@@ -25,6 +25,8 @@ public class MainClient {
             System.out.println("Start the connection.");
             ThreadClient threadClient = new ThreadClient(new ObjectInputStream(socket.getInputStream()));
             threadClient.start();
+            objectOutputStream.writeObject(user);
+            objectOutputStream.flush();
 
             while (true) {
                 try {

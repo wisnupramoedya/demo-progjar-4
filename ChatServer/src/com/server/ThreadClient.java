@@ -1,6 +1,7 @@
 package com.server;
 
 import com.ww.Message;
+import com.ww.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,6 +13,7 @@ public class ThreadClient extends Thread {
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
     private ThreadServer threadServer;
+    private User user;
 
     public ThreadClient(Socket socket, ThreadServer threadServer) throws IOException {
         this.socket = socket;
@@ -27,6 +29,15 @@ public class ThreadClient extends Thread {
 
     @Override
     public void run() {
+        try {
+            User user = (User) this.objectInputStream.readObject();
+            this.user = user;
+            System.out.println("User " + user.getFullName() + " with id " + this.getClientId() + " is connected.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error: Client's username is not defined. " + e.getMessage());
+            return;
+        }
+
         while (true) {
             try {
                 Message message = (Message) this.objectInputStream.readObject();
