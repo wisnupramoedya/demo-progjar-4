@@ -1,4 +1,4 @@
-package com.ww;
+package com.client;
 
 import com.ww.Message;
 

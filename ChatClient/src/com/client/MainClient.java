@@ -1,4 +1,8 @@
-package com.ww;
+package com.client;
+
+import com.ww.Message;
+import com.ww.User;
+import com.ww.Utils;
 
 import java.io.*;
 import java.net.Socket;
