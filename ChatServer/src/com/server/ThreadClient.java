@@ -48,6 +48,13 @@ public class ThreadClient extends Thread {
                 this.threadServer.sendToAll(message);
             } catch (IOException e) {
                 this.threadServer.getClients().remove(this.getClientId());
+                try {
+                    this.objectInputStream.close();
+                    this.objectInputStream.close();
+                    this.socket.close();
+                } catch (IOException ex) {
+                    System.err.println("Error: Client with id " + this.getClientId() + " fail to close the connection. " + e.getMessage());
+                }
                 System.err.println("Error: Client with id " + this.getClientId() + " could not be accessed. " + e.getMessage());
                 break;
             } catch (ClassNotFoundException e) {
