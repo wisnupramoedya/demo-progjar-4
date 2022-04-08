@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public class ThreadClient extends Thread {
-    private ObjectInputStream objectInputStream;
+    private final ObjectInputStream objectInputStream;
 
     public ThreadClient(ObjectInputStream objectInputStream) {
         this.objectInputStream = objectInputStream;
@@ -17,9 +17,10 @@ public class ThreadClient extends Thread {
         while (true) {
             try {
                 Message message = (Message) this.objectInputStream.readObject();
-                System.out.println(message.outputBroadcastMessage());
+                System.out.println(message.outputMessage());
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                System.err.println("Error: Client could not receive messages from the server. " + e.getMessage());
+                break;
             }
         }
     }

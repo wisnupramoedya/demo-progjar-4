@@ -12,28 +12,36 @@ public class MainClient {
         try {
             Socket socket = new Socket(Utils.HOST, Utils.PORT);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-            ThreadClient threadClient = new ThreadClient(new ObjectInputStream(socket.getInputStream()));
-            threadClient.start();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-            System.out.print("Username: ");
-            String username = bufferedReader.readLine();
-            User user = new User();
-            user.setFullName(username);
+            CommandReaderClient.commandStarter();
+            CommandReaderClient commandReaderClient = new CommandReaderClient();
+
+            System.out.print("Login as: ");
+            String name = bufferedReader.readLine();
+            User user = commandReaderClient.createUsername(name);
+            System.out.println("Username named " + user.getFullName() + " has been created.");
+
+            System.out.println("Start the connection.");
+            ThreadClient threadClient = new ThreadClient(new ObjectInputStream(socket.getInputStream()));
+            threadClient.start();
 
             while (true) {
-                String text = bufferedReader.readLine();
+                try {
+                    String text = bufferedReader.readLine();
+                    Message message = commandReaderClient.createMessage(text, user);
 
-                Message message = new Message();
-                message.setUser(user);
-                message.setText(text);
-
-                objectOutputStream.writeObject(message);
-                objectOutputStream.flush();
+                    objectOutputStream.writeObject(message);
+                    objectOutputStream.flush();
+                } catch (Exception e) {
+                    System.err.println("Error: Client could not send messages to the server. " + e.getMessage());
+                    break;
+                }
             }
 
+            System.out.println("Connection stop.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error: Client program is shutdown. " + e.getMessage());
         }
     }
 }
