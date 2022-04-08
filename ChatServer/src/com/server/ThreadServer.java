@@ -53,6 +53,17 @@ public class ThreadServer extends Thread {
         return message;
     }
 
+    public void sendToAll(Message message) throws IOException {
+        String text = message.getText();
+        text = text.substring(text.indexOf("* < ") + "* < ".length());
+
+        message.setCommand(false);
+        message.setBroadcast(true);
+        message.setText(text);
+
+        Enumeration<String> enumeration = this.clients.keys();
+        while (enumeration.hasMoreElements()) {
+            String clientId = enumeration.nextElement();
             ThreadClient threadClient = this.clients.get(clientId);
             threadClient.sendMessage(message);
         }
@@ -65,6 +76,8 @@ public class ThreadServer extends Thread {
 
         if (message.outputMessage().equals("lists")) {
             threadClient.sendMessage(this.getAllOnlineUsers());
+        } else if (message.outputMessage().startsWith("* < ")) {
+            this.sendToAll(message);
         } else {
             this.sendToAll(message);
         }
