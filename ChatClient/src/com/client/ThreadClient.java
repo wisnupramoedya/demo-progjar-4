@@ -1,6 +1,7 @@
 package com.client;
 
 import com.ww.Message;
+import com.ww.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -20,6 +21,7 @@ public class ThreadClient extends Thread {
                 System.out.println(message.outputMessage());
             } catch (IOException | ClassNotFoundException e) {
                 System.err.println("Error: Client could not receive messages from the server. " + e.getMessage());
+                System.out.println("Type ENTER to exit.");
                 break;
             }
         }
