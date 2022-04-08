@@ -32,12 +32,11 @@ public class ThreadClient extends Thread {
                 Message message = (Message) this.objectInputStream.readObject();
                 this.threadServer.sendToAll(message);
             } catch (IOException e) {
-                this.threadServer.getClientList().remove(this.getClientId());
-                e.printStackTrace();
+                this.threadServer.getClients().remove(this.getClientId());
+                System.err.println("Error: Client with id " + this.getClientId() + " could not be accessed. " + e.getMessage());
                 break;
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                break;
+                System.err.println("Error: Wrong sent message. " + e.getMessage());
             }
         }
     }

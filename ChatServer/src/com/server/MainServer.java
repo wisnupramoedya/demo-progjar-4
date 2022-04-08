@@ -8,7 +8,7 @@ public class MainServer {
             ThreadServer threadServer = new ThreadServer();
             threadServer.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error: Server has been terminated. " + e.getMessage());
         }
     }
 }

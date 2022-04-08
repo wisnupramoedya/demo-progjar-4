@@ -29,7 +29,8 @@ public class ThreadServer extends Thread {
                 String clientId = threadClient.getClientId();
                 this.clients.put(clientId, threadClient);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("Error: Socket connection has been shutdown. " + e.getMessage());
+                break;
             }
         }
     }
