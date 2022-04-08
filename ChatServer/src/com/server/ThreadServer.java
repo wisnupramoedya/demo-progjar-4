@@ -35,11 +35,8 @@ public class ThreadServer extends Thread {
         }
     }
 
-    public Message getAllOnlineUsers() {
-        Message message = new Message();
-        message.setCommand(true);
-
-        StringBuilder text = new StringBuilder("Online users:\n");
+    public String getAllOnlineUsers() {
+        StringBuilder text = new StringBuilder("Online users:");
         Enumeration<String> enumeration = this.clients.keys();
         while (enumeration.hasMoreElements()) {
             text.append("\n");
@@ -50,8 +47,7 @@ public class ThreadServer extends Thread {
             text.append("-> ").append(this.clients.get(clientId).getUser().getFullName());
         }
 
-        message.setText(text.toString());
-        return message;
+        return text.toString();
     }
 
     public void sendToAll(Message message) throws IOException {
@@ -70,17 +66,52 @@ public class ThreadServer extends Thread {
         }
     }
 
+    public boolean sendToSpecificUser(Message message) throws IOException {
+        String text = message.getText();
+        int endOfFullName = text.indexOf(" < ");
+        String receiverFullName = text.substring(0, endOfFullName);
+        String newText = text.substring(endOfFullName + " < ".length());
+
+        message.setCommand(false);
+        message.setBroadcast(false);
+        message.setText(newText);
+
+        boolean isUserFound = false;
+        Enumeration<String> enumeration = this.clients.keys();
+        while (enumeration.hasMoreElements() && !isUserFound) {
+            String clientId = enumeration.nextElement();
+            ThreadClient threadClient = this.clients.get(clientId);
+            isUserFound = threadClient.getUser() != null && threadClient.getUser().getFullName().equals(receiverFullName);
+            if (isUserFound) {
+                message.setUserReceiver(threadClient.getUser());
+                threadClient.sendMessage(message);
+            }
+        }
+        return isUserFound;
+    }
+
+    public Message sendBackMessageToSender(String text) {
+        Message message = new Message();
+        message.setCommand(true);
+        message.setText(text);
+        return message;
+    }
+
     public void readCommand(Message message, ThreadClient threadClient) throws IOException {
         if (!message.isCommand()) {
             return;
         }
 
         if (message.outputMessage().equals("lists")) {
-            threadClient.sendMessage(this.getAllOnlineUsers());
+            threadClient.sendMessage(this.sendBackMessageToSender(this.getAllOnlineUsers()));
         } else if (message.outputMessage().startsWith("* < ")) {
             this.sendToAll(message);
+        } else if (message.outputMessage().contains(" < ")) {
+            if (!this.sendToSpecificUser(message)) {
+                threadClient.sendMessage(this.sendBackMessageToSender("User is not found."));
+            }
         } else {
-            this.sendToAll(message);
+            threadClient.sendMessage(this.sendBackMessageToSender("Your command is invalid."));
         }
     }
 
