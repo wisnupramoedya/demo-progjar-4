@@ -10,11 +10,11 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class ThreadServer extends Thread {
-    private Hashtable<String, ThreadClient> clientList;
+    private Hashtable<String, ThreadClient> clients;
     private final ServerSocket serverSocket;
 
     public ThreadServer() throws IOException {
-        this.clientList = new Hashtable<>();
+        this.clients = new Hashtable<>();
         this.serverSocket = new ServerSocket(Utils.PORT);
     }
 
@@ -27,7 +27,7 @@ public class ThreadServer extends Thread {
                 threadClient.start();
 
                 String clientId = threadClient.getClientId();
-                this.clientList.put(clientId, threadClient);
+                this.clients.put(clientId, threadClient);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -35,17 +35,17 @@ public class ThreadServer extends Thread {
     }
 
     public void sendToAll(Message message) throws IOException {
-        Enumeration<String> enumeration = this.clientList.keys();
+        Enumeration<String> enumeration = this.clients.keys();
 
         while (enumeration.hasMoreElements()) {
             String clientId = enumeration.nextElement();
 
-            ThreadClient threadClient = this.clientList.get(clientId);
+            ThreadClient threadClient = this.clients.get(clientId);
             threadClient.sendMessage(message);
         }
     }
 
-    public Hashtable<String, ThreadClient> getClientList() {
-        return clientList;
+    public Hashtable<String, ThreadClient> getClients() {
+        return clients;
     }
 }
