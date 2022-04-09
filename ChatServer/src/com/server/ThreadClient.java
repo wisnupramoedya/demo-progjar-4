@@ -3,19 +3,19 @@ package com.server;
 import com.ww.Message;
 import com.ww.User;
 
+import javax.net.ssl.SSLSocket;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 
 public class ThreadClient extends Thread {
-    private Socket socket;
+    private SSLSocket socket;
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
     private ThreadServer threadServer;
     private User user;
 
-    public ThreadClient(Socket socket, ThreadServer threadServer) throws IOException {
+    public ThreadClient(SSLSocket socket, ThreadServer threadServer) throws IOException {
         this.socket = socket;
         this.objectOutputStream = new ObjectOutputStream(this.socket.getOutputStream());
         this.objectInputStream = new ObjectInputStream(this.socket.getInputStream());

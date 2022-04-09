@@ -1,28 +1,41 @@
 package com.server;
 
+import com.ssl.SSLServerSocketKeystoreFactory;
 import com.ww.Message;
 import com.ww.Utils;
 
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class ThreadServer extends Thread {
     private Hashtable<String, ThreadClient> clients;
-    private final ServerSocket serverSocket;
+    private final SSLServerSocket serverSocket;
 
-    public ThreadServer() throws IOException {
+    public ThreadServer() throws
+            IOException, UnrecoverableKeyException,
+            CertificateException, NoSuchAlgorithmException,
+            KeyStoreException, KeyManagementException
+    {
         this.clients = new Hashtable<>();
-        this.serverSocket = new ServerSocket(Utils.PORT);
+        this.serverSocket = SSLServerSocketKeystoreFactory.getServerSocketWithCert(
+                Utils.PORT, Utils.getPrivateCertPath(), Utils.PRIVATE_CERT_PASSWORD,
+                SSLServerSocketKeystoreFactory.ServerSecureType.SSL
+        );
     }
 
     @Override
     public void run() {
         while (true) {
             try {
-                Socket socket = this.serverSocket.accept();
+                SSLSocket socket = (SSLSocket) this.serverSocket.accept();
                 ThreadClient threadClient = new ThreadClient(socket, this);
                 threadClient.start();
 
@@ -31,6 +44,8 @@ public class ThreadServer extends Thread {
             } catch (IOException e) {
                 System.err.println("Error: Socket connection has been shutdown. " + e.getMessage());
                 break;
+            } catch (Exception e) {
+                System.err.println("Error: Server error. " + e.getMessage());
             }
         }
     }

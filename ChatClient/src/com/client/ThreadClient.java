@@ -1,17 +1,16 @@
 package com.client;
 
 import com.ww.Message;
-import com.ww.User;
 
+import javax.net.ssl.SSLSocket;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.Socket;
 
 public class ThreadClient extends Thread {
     private final ObjectInputStream objectInputStream;
-    private final Socket socket;
+    private final SSLSocket socket;
 
-    public ThreadClient(Socket socket, ObjectInputStream objectInputStream) {
+    public ThreadClient(SSLSocket socket, ObjectInputStream objectInputStream) {
         this.socket = socket;
         this.objectInputStream = objectInputStream;
     }

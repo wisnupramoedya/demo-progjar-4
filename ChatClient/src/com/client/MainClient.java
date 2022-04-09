@@ -1,16 +1,24 @@
 package com.client;
 
+import com.ssl.SSLSocketKeystoreFactory;
 import com.ww.Message;
 import com.ww.User;
 import com.ww.Utils;
 
+import javax.net.ssl.SSLSocket;
 import java.io.*;
-import java.net.Socket;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 
 public class MainClient {
     public static void main(String[] args) {
         try {
-            Socket socket = new Socket(Utils.HOST, Utils.PORT);
+            SSLSocket socket = SSLSocketKeystoreFactory.getSocketWithCert(
+                    Utils.HOST, Utils.PORT, Utils.getPublicCertPath(), Utils.PUBLIC_CERT_PASSWORD,
+                    SSLSocketKeystoreFactory.SecureType.SSL
+            );
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -46,7 +54,7 @@ public class MainClient {
             }
 
             System.out.println("Connection stop.");
-        } catch (IOException e) {
+        } catch (IOException | KeyManagementException | NoSuchAlgorithmException | CertificateException | KeyStoreException e) {
             System.err.println("Error: Client program is shutdown. " + e.getMessage());
         }
     }
