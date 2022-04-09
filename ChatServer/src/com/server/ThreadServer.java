@@ -115,8 +115,6 @@ public class ThreadServer extends Thread {
         }
     }
 
-
-
     public Hashtable<String, ThreadClient> getClients() {
         return clients;
     }
