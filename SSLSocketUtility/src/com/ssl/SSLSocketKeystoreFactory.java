@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.Socket;
-import java.net.SocketException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -30,8 +29,6 @@ public class SSLSocketKeystoreFactory {
 
     /**
      * A SSL algorithms types chooser enum
-     *
-     * @author gpotter2
      */
     public static enum SecureType {
         SSL("SSL"),
@@ -103,7 +100,6 @@ public class SSLSocketKeystoreFactory {
      * @throws CertificateException     If the certificate is not correct (null or damaged) or the password is incorrect
      * @throws NoSuchAlgorithmException If the certificate is from an unknown type
      * @throws KeyStoreException        If your system is not compatible with JKS KeyStore certificates
-     * @author gpotter2
      */
     public static SSLSocket getSocketWithCert(
             String ip, int port, InputStream pathToCert,
@@ -132,7 +128,6 @@ public class SSLSocketKeystoreFactory {
      * @throws CertificateException     If the certificate is not correct (null or damaged) or the password is incorrect
      * @throws NoSuchAlgorithmException If the certificate is from an unknown type
      * @throws KeyStoreException        If your system is not compatible with JKS KeyStore certificates
-     * @author gpotter2
      */
     public static SSLSocket getSocketWithCert(
             InetAddress ip, int port, String pathToCert,
@@ -161,7 +156,6 @@ public class SSLSocketKeystoreFactory {
      * @throws CertificateException     If the certificate is not correct (null or damaged) or the password is incorrect
      * @throws NoSuchAlgorithmException If the certificate is from an unknown type
      * @throws KeyStoreException        If your system is not compatible with JKS KeyStore certificates
-     * @author gpotter2
      */
     public static SSLSocket getSocketWithCert(
             InetAddress ip, int port, InputStream pathToCert,
@@ -196,7 +190,6 @@ public class SSLSocketKeystoreFactory {
      * @throws CertificateException     If the certificate is not correct (null or damaged) or the password is incorrect
      * @throws NoSuchAlgorithmException If the certificate is from an unknown type
      * @throws KeyStoreException        If your system is not compatible with JKS KeyStore certificates
-     * @author gpotter2
      */
     public static SSLSocket getSocketWithCert(
             InetAddress ip, int port, InputStream pathToCert,
@@ -226,7 +219,6 @@ public class SSLSocketKeystoreFactory {
      * @return
      * @throws NoSuchAlgorithmException
      * @throws KeyStoreException
-     * @author gpotter2
      */
     private static X509TrustManager[] tm(KeyStore keystore) throws NoSuchAlgorithmException, KeyStoreException {
         TrustManagerFactory trustMgrFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
